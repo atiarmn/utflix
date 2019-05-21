@@ -23,9 +23,13 @@ void InputHandler::run(){
 				}
 			}
 		}
-		get_informations();
-		request->get_informations(informations);
-		handle();
+		try{
+			get_informations();
+			request->get_informations(informations);
+			handle();
+		}catch(std::exception& ex){
+			std::cerr<<ex.what()<<std::endl;
+		}
 		informations.clear();
 		input.clear();
 	}
@@ -43,19 +47,15 @@ void InputHandler::get_informations(){
 	}
 }
 void InputHandler::handle(){
-	if(input[0]=="POST"){
-		try{
-			post();
-		}catch(std::exception& ex){
-			std::cerr<<ex.what()<<std::endl;
-		}
-	}
+	if(input[0]=="POST")
+		post();
 	if(input[0]=="GET")
 		get();
 	if(input[0]=="DELETE")
 		delete_func();
-	if(input[0]=="PUT")
+	if(input[0]=="PUT"){
 		put();
+	}
 	if(input[0]!="POST" && input[0]!="GET" && input[0]!="DELETE" && input[0]!= "PUT")
 		throw BadRequest();
 }
@@ -94,6 +94,7 @@ void InputHandler::post(){
 			informations["price"]=="\0" || informations["summary"]=="\0" || informations["director"]=="\0" || input[2]!="?")
 			throw BadRequest();
 		check_num(informations["year"]);
+		check_num(informations["price"]);
 		input_error_flag=1;
 		request->post_films();
 	}
@@ -146,8 +147,7 @@ void InputHandler::post(){
 		input_error_flag=1;
 	}
 	if(input_error_flag==0)
-		throw BadRequest();
-	//not found
+		throw NotFound();
 }
 void InputHandler::put(){
 	int input_error_flag=0;
@@ -202,7 +202,7 @@ void InputHandler::get(){
 		request->get_notification();
 	}
 	if(input_error_flag==0)
-		throw BadRequest();
+		throw NotFound();
 }
 void InputHandler::delete_func(){
 	int input_error_flag=0;
@@ -222,5 +222,5 @@ void InputHandler::delete_func(){
 		input_error_flag=1;
 	}
 	if(input_error_flag==0)
-		throw BadRequest();
+		throw NotFound();
 }

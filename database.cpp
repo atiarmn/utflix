@@ -7,34 +7,36 @@ Database* Database::get_instance() {
       	instance = new Database();
       return instance;
 }
-// std::vector<Film*> Database::get_films(){
-// 	return this->films;
-// }
+std::vector<Film*> Database::get_all_films(){
+	return this->films;
+}
 std::vector<User*> Database::get_all_uesers(){
 	return this->users;
 }
-// void Database::add_film(Film* film){
-// 	(this->films).push_back(film);
-// }
+void Database::add_film(Film* film){
+	(this->films).push_back(film);
+}
 void Database::add_user(User* user){
 	(this->users).push_back(user);
 }
-// Film* Database::search_film(int film_id){
-// 	for(int i=0;i<films.size();i++)
-// 		if(films[i]->get_id()==film_id)
-// 			return films[i];
-// }
-// void Database::delete_film(int film_id){
-// 	for(int i=0;i<films.size();i++)
-// 		if(films[i]->get_id()==film_id)
-// 			films.erase(films.begin()+i);
-// }
+Film* Database::get_film(int film_id){
+	for(int i=0;i<films.size();i++)
+		if(films[i]->get_id()==film_id)
+			return films[i];
+}
+
 int Database::find_last_user(){
 	return users.size();
 }
 bool Database::existed_username(std::string username){
 	for(int i=0;i<users.size();i++)
 		if(users[i]->get_username()==username)
+			return true;
+	return false;
+}
+bool Database::existed_film(int film_id){
+	for(int i=0;i<films.size();i++)
+		if(films[i]->get_id()==film_id)
 			return true;
 	return false;
 }
@@ -49,7 +51,7 @@ User* Database::get_user(std::string username){
 		if(users[i]->get_username()==username)
 			return users[i];
 }
-void Database::add_money_user(std::string username , int amount){
-	get_user(username)-
+int Database::find_last_film(){
+	return films.size();
 }
 Database::Database() {}

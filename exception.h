@@ -13,5 +13,7 @@ class NotFound:public std::exception{
 public:
 	virtual const char* what() const throw () {return "Not Found";}
 };
-
+class PermissionDen:public std::exception{
+	virtual const char* what() const throw () {return "Permission Denied";}
+};
 #endif

@@ -13,6 +13,9 @@ User::User(std::map<std::string,std::string> _informations){
 	else
 		type=USER;
 }
+User::User(){
+	id=0;
+}
 void User::get_login(){
 	login=true;
 }
