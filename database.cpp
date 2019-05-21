@@ -34,6 +34,12 @@ bool Database::existed_username(std::string username){
 			return true;
 	return false;
 }
+bool Database::existed_user_id(int user_id){
+	for(int i=0;i<users.size();i++)
+		if(i+1==user_id)
+			return true;
+	return false;
+}
 bool Database::existed_film(int film_id){
 	for(int i=0;i<films.size();i++)
 		if(films[i]->get_id()==film_id)
@@ -50,6 +56,12 @@ User* Database::get_user(std::string username){
 	for(int i=0;i<users.size();i++)
 		if(users[i]->get_username()==username)
 			return users[i];
+}
+User* Database::get_user_by_id(int id){
+	for(int i=0;i<users.size();i++)
+		if(i+1==id)
+			return users[i];
+	throw NotFound();
 }
 int Database::find_last_film(){
 	return films.size();

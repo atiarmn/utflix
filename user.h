@@ -19,6 +19,7 @@ public:
 	User();
 	void get_login();
 	void buy_film(int film_id);
+	void follow_publisher(int pub_id);
 	std::string get_username();
 	std::string get_password();
 	void add_money(int amount);
@@ -26,6 +27,8 @@ public:
 	int get_id(){return id;}
 	virtual void add_film(int film_id){throw PermissionDen();}
 	virtual void delete_film(int film_id){throw PermissionDen();}
+	virtual bool find_film(int film_id){throw PermissionDen();}
+	virtual void add_follower(int user_id){}
 protected:
 	int type;
 	int id;
@@ -37,6 +40,7 @@ protected:
 	std::string email;
 	std::map<std::string,std::string> informations;
 	std::vector<int> purchased_films;
+	std::vector<int> followed_publishers;
 };
 
 #endif

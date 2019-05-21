@@ -22,6 +22,9 @@ void User::get_login(){
 void User::buy_film(int film_id){
 	purchased_films.push_back(film_id);
 }
+void User::follow_publisher(int pub_id){
+	followed_publishers.push_back(pub_id);
+}
 std::string User::get_username(){
 	return username;
 }
@@ -31,3 +34,4 @@ std::string User::get_password(){
 void User::add_money(int amount){
 	money+=amount;
 }
+

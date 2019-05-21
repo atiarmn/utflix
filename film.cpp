@@ -7,6 +7,7 @@ Film::Film(std::map<std::string,std::string> informations,int _publisher_id){
 	summary=informations["summary"];
 	director=informations["director"];
 	publisher_id=_publisher_id;
+	rate=0;
 	deleted=false;
 	if(publisher_id==0)
 		throw PermissionDen();
@@ -49,5 +50,23 @@ void Film::delete_film(User* logedin_user,std::map<std::string,std::string> info
 		throw PermissionDen();
 	service->delete_film(informations);
 }
+void Film::get(User* logedin_user,std::map<std::string,std::string> informations){
+	if(logedin_user==NULL)
+		throw PermissionDen();
+	int film_id=std::stoi(informations["film_id"],nullptr,0);
+	service->get(informations);
+}
+void Film::print_details(){
+	std::cout<<"Details of Film "<<name<<std::endl;
+	std::cout<<"Id = "<<id<<std::endl;
+	std::cout<<"Director = "<<director<<std::endl;
+	std::cout<<"Length = "<<length<<std::endl;
+	std::cout<<"Year = "<<year<<std::endl;
+	std::cout<<"Summary = "<<summary<<std::endl;
+	std::cout<<"Director = "<<director<<std::endl;
+	std::cout<<"Rate = "<<rate<<std::endl;
+	std::cout<<"Price = "<<price<<std::endl;
+}
+
 
 

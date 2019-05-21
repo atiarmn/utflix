@@ -27,10 +27,12 @@ void InputHandler::run(){
 			get_informations();
 			request->get_informations(informations);
 			handle();
-		}catch(std::exception& ex){
+		}catch(std ::exception& ex){
 			std::cerr<<ex.what()<<std::endl;
 		}
 		informations.clear();
+		for(int i=0;i<input.size();i++)
+			input[i]="";
 		input.clear();
 	}
 }

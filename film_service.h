@@ -16,7 +16,7 @@ public:
 	void post(Film* new_film);
 	void put(User* logedin_user,std::map<std::string,std::string> informations);
 	void delete_film(std::map<std::string,std::string> informations);
-	void get(std::map<std::string,std::string> informations){}
+	void get(std::map<std::string,std::string> informations);
 };
 
 #endif

@@ -21,6 +21,8 @@ public:
 	bool existed_username(std::string username);
 	bool existed_film(int film_id);
 	bool correct_password(std::string username,std::string password);
+	bool existed_user_id(int user_id);
+	User* get_user_by_id(int id);
 	User* get_user(std::string username);
 	Film* get_film(int film_id);
 private:

@@ -39,7 +39,21 @@ void Request::put_films(){
 }
 void Request::delete_films(){
 	Film* film = new Film();
-	film->delete_film(logedin_user,informations);
 	logedin_user->delete_film(std::stoi(informations["film_id"],nullptr,0));
+	film->delete_film(logedin_user,informations);
+	std::cout<<"OK"<<std::endl;
+}
+void Request::get_films_detail(){
+	Film* film = new Film();
+	film->get(logedin_user,informations);
+}
+void Request::post_buy(){
+	Buy* buy= new Buy();
+	buy->post(logedin_user,informations);
+	std::cout<<"OK"<<std::endl;
+}
+void Request::post_followers(){
+	Followers* followers = new Followers();
+	followers->post(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;
 }

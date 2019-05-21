@@ -12,6 +12,7 @@ public:
 	void add_film(int film_id);
 	void add_follower(int user_id);
 	void delete_film(int film_id);
+	bool find_film(int film_id);
 private:
 	std::vector<int> posted_films;	
 	std::vector<int> followers;	
