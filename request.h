@@ -13,6 +13,9 @@
 #include "money.h"
 #include "buy.h"
 #include "followers.h"
+#include "rate.h"
+#include "comment.h"
+#include "comment_service.h"
 #include <map>
 
 class Request{
@@ -28,14 +31,14 @@ public:
 	void get_films_detail();
 	void post_buy();
 	void post_followers();
+	void post_rate();
+	void post_comments();
+	void delete_comments();
 	void post_money_publisher(){}
 	void get_followers(){}
 	void get_published(){}
 	void post_replies(){}
-	void delete_comments(){}
 	void get_films_find(){}
-	void post_rate(){}
-	void post_comments(){}
 	void get_purchased(){}
 	void get_notification(){}
 	void get_notification_read(){}

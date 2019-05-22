@@ -45,7 +45,7 @@ void Request::delete_films(){
 }
 void Request::get_films_detail(){
 	Film* film = new Film();
-	film->get(logedin_user,informations);
+	film->get_detail(logedin_user,informations);
 }
 void Request::post_buy(){
 	Buy* buy= new Buy();
@@ -56,4 +56,19 @@ void Request::post_followers(){
 	Followers* followers = new Followers();
 	followers->post(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;
+}
+void Request::post_rate(){
+	Rate* rate = new Rate();
+	rate->post(informations);
+	std::cout<<"OK"<<std::endl;
+}
+void Request::post_comments(){
+	Comment* comment = new Comment(informations["content"]);
+	comment->post(logedin_user,informations);
+	std::cout<<"OK"<<std::endl;
+}
+void Request::delete_comments(){
+	Comment* comment = new Comment();
+	comment->delete_comment(logedin_user,informations);
+	std::cout<<"OK"<<std::endl;	
 }

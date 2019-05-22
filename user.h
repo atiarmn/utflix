@@ -18,13 +18,16 @@ public:
 	User(std::map<std::string,std::string> _informations);
 	User();
 	void get_login();
-	void buy_film(int film_id);
+	void buy_film(int film_id,int price);
 	void follow_publisher(int pub_id);
 	std::string get_username();
 	std::string get_password();
 	void add_money(int amount);
 	int get_type(){return type;}
 	int get_id(){return id;}
+	int get_money(){return money;}
+	bool film_bought(int film_id);
+	bool existed_follower(int pub_id);
 	virtual void add_film(int film_id){throw PermissionDen();}
 	virtual void delete_film(int film_id){throw PermissionDen();}
 	virtual bool find_film(int film_id){throw PermissionDen();}

@@ -33,4 +33,20 @@ void FilmService::get(std::map<std::string,std::string> informations){
 		Film* film = database->get_film(film_id);	
 		film->print_details();
 	}
+	else
+		throw NotFound();
+}
+void FilmService::rate(std::map<std::string,std::string> informations){
+	int film_id=std::stoi(informations["film_id"],nullptr,0);
+	int score = std::stoi(informations["score"],nullptr,0);
+	Database* database = database->get_instance();
+	if(database->existed_film(film_id)){
+		Film* film = database->get_film(film_id);
+		if(film->deleted())
+			throw NotFound();
+		film->set_rate(score);
+	}
+	else
+		throw NotFound();
+
 }

@@ -8,7 +8,7 @@ Film::Film(std::map<std::string,std::string> informations,int _publisher_id){
 	director=informations["director"];
 	publisher_id=_publisher_id;
 	rate=0;
-	deleted=false;
+	is_deleted=false;
 	if(publisher_id==0)
 		throw PermissionDen();
 	point=0;
@@ -29,7 +29,7 @@ void Film::put(std::map<std::string,std::string> informations){
 	change_infos(informations);
 }
 void Film::set_delete(){
-	deleted=true;
+	is_deleted=true;
 }
 void Film::change_infos(std::map<std::string,std::string> informations){
 	if(informations["name"]!="\0")
@@ -50,7 +50,7 @@ void Film::delete_film(User* logedin_user,std::map<std::string,std::string> info
 		throw PermissionDen();
 	service->delete_film(informations);
 }
-void Film::get(User* logedin_user,std::map<std::string,std::string> informations){
+void Film::get_detail(User* logedin_user,std::map<std::string,std::string> informations){
 	if(logedin_user==NULL)
 		throw PermissionDen();
 	int film_id=std::stoi(informations["film_id"],nullptr,0);
@@ -65,8 +65,26 @@ void Film::print_details(){
 	std::cout<<"Summary = "<<summary<<std::endl;
 	std::cout<<"Director = "<<director<<std::endl;
 	std::cout<<"Rate = "<<rate<<std::endl;
-	std::cout<<"Price = "<<price<<std::endl;
+	std::cout<<"Price = "<<price<<"\n"<<std::endl;
+	std::cout<<"Comments"<<std::endl;
+	for(int i=0;i<comments.size();i++){
+		std::cout<<comments[i]->get_id()<<" ";
+		std::cout<<comments[i]->get_content()<<std::endl;
+	}
+
 }
-
-
-
+void Film::set_rate(int _rate){
+	rate=(_rate+rate)/2;
+}
+void Film::post_rate(std::map<std::string,std::string> informations){
+	service->rate(informations);
+}
+void Film::post_comment(Comment* new_comment){
+	comments.push_back(new_comment);
+}
+int Film::get_comment_id(){
+	return comments.size();
+}
+void Film::delete_comment(int comment_id){
+	comments.erase(comments.begin()+comment_id-1);
+}

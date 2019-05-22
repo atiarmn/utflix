@@ -138,6 +138,8 @@ void InputHandler::post(){
 			throw BadRequest();
 		check_num(informations["film_id"]);
 		check_num(informations["score"]);
+		if(std::stoi(informations["score"],nullptr,0)>10)
+			throw BadRequest();
 		request->post_rate();
 		input_error_flag=1;
 	}
