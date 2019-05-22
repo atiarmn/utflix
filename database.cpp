@@ -66,4 +66,30 @@ User* Database::get_user_by_id(int id){
 int Database::find_last_film(){
 	return films.size();
 }
+void Database::add_network_money(int money){
+	network_money+=money;
+}
+void Database::set_publisher_money(User* logedin_user){
+	for(int i=0;i<films.size();i++)
+		if(films[i]->get_publisher_id()==logedin_user->get_id())
+			for(int j=0;j<users.size();j++){
+				if(users[j]->film_bought(films[i]->get_id())){
+					if(films[i]->get_type()=="weak"){
+						network_money -=films[i]->get_price();
+						network_money+=films[i]->get_price()*(0.2);
+						logedin_user->add_money(films[i]->get_price()*(0.8));
+					}
+					if(films[i]->get_type()=="avarage"){
+						network_money -=films[i]->get_price();
+						network_money+=films[i]->get_price()*(0.1);
+						logedin_user->add_money(films[i]->get_price()*(0.9));
+					}
+					if(films[i]->get_type()=="good"){
+						network_money -=films[i]->get_price();
+						network_money+=films[i]->get_price()*(0.05);
+						logedin_user->add_money(films[i]->get_price()*(0.95));
+					}
+				}
+			}
+}
 Database::Database() {}

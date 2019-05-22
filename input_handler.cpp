@@ -28,7 +28,7 @@ void InputHandler::run(){
 			request->get_informations(informations);
 			handle();
 		}catch(std ::exception& ex){
-			std::cerr<<ex.what()<<std::endl;
+			std::cout<<ex.what()<<std::endl;
 		}
 		informations.clear();
 		for(int i=0;i<input.size();i++)
@@ -138,7 +138,7 @@ void InputHandler::post(){
 			throw BadRequest();
 		check_num(informations["film_id"]);
 		check_num(informations["score"]);
-		if(std::stoi(informations["score"],nullptr,0)>10)
+		if(std::stoi(informations["score"],nullptr,0)>10 || std::stoi(informations["score"],nullptr,0)<1)
 			throw BadRequest();
 		request->post_rate();
 		input_error_flag=1;

@@ -33,9 +33,7 @@ void Film::set_delete(){
 }
 void Film::change_infos(std::map<std::string,std::string> informations){
 	if(informations["name"]!="\0")
-			name=informations["name"];
-	if(informations["price"]!="\0")
-		price=informations["price"];
+		name=informations["name"];
 	if(informations["year"]!="\0")
 		year=informations["year"];
 	if(informations["length"]!="\0")
@@ -69,15 +67,27 @@ void Film::print_details(){
 	std::cout<<"Comments"<<std::endl;
 	for(int i=0;i<comments.size();i++){
 		std::cout<<comments[i]->get_id()<<" ";
-		std::cout<<comments[i]->get_content()<<std::endl;
+		std::cout<<comments[i]->get_content()<<" ";
+		for(int j=0;j<comments[i]->replies_num();j++)
+			std::cout<<comments[i]->get_reply(j)<<std::endl;
 	}
 
 }
-void Film::set_rate(int _rate){
-	rate=(_rate+rate)/2;
+void Film::set_rate(int user_id,int _rate){
+	rates[user_id]=_rate;
+	rate=0;
+	for(auto it = rates.begin();it!=rates.end();it++)
+		rate=(rate+rates[it->first]);
+	rate=rate/rates.size();
+	if(rate>=8)
+		type="good";
+	if(rate>=5 && rate<8)
+		type="avarage";
+	if(rate<5)
+		type="weak";
 }
-void Film::post_rate(std::map<std::string,std::string> informations){
-	service->rate(informations);
+void Film::post_rate(int user_id,std::map<std::string,std::string> informations){
+	service->rate(user_id,informations);
 }
 void Film::post_comment(Comment* new_comment){
 	comments.push_back(new_comment);
@@ -87,4 +97,10 @@ int Film::get_comment_id(){
 }
 void Film::delete_comment(int comment_id){
 	comments.erase(comments.begin()+comment_id-1);
+}
+Comment* Film::find_comment(int comment_id){
+	for(int i=0;i<comments.size();i++)
+		if(comments[i]->get_id()==comment_id)
+			return comments[i];
+	throw NotFound();
 }

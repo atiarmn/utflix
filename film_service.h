@@ -17,7 +17,7 @@ public:
 	void put(User* logedin_user,std::map<std::string,std::string> informations);
 	void delete_film(std::map<std::string,std::string> informations);
 	void get(std::map<std::string,std::string> informations);
-	void rate(std::map<std::string,std::string> informations);
+	void rate(int user_id,std::map<std::string,std::string> informations);
 };
 
 #endif

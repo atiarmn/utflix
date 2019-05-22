@@ -18,6 +18,8 @@ public:
 	void add_user(User* user);
 	int find_last_film();
 	int find_last_user();
+	void add_network_money(int money);
+	void set_publisher_money(User* logedin_user);
 	bool existed_username(std::string username);
 	bool existed_film(int film_id);
 	bool correct_password(std::string username,std::string password);
@@ -27,6 +29,7 @@ public:
 	Film* get_film(int film_id);
 private:
 	static Database* instance;
+	float network_money;
 	std::vector<Film*> films;
 	std::vector<User*> users;
 	Database();

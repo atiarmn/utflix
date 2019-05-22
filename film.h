@@ -19,21 +19,27 @@ public:
 	void delete_film(User* logedin_user,std::map<std::string,std::string> informations);
 	void put(std::map<std::string,std::string> informations);
 	void get_detail(User* logedin_user,std::map<std::string,std::string> informations);
-	void post_rate(std::map<std::string,std::string> informations);
+	void post_rate(int user_id,std::map<std::string,std::string> informations);
 	int get_id(){return id;}
 	void delete_comment(int comment_id);
+	Comment* find_comment(int comment_id);
+	float get_rate(){return rate;}
 	int get_price(){return std::stoi(price,nullptr,0);}
+	int get_publisher_id(){return publisher_id;}
 	void set_delete();
 	bool deleted(){return is_deleted;}
-	void set_rate(int _rate);
+	void set_rate(int user_id,int _rate);
 	void print_details();
 	void post_comment(Comment* new_comment);
 	int get_comment_id();
+	std::string get_type(){return type;}
 protected:
 	FilmService* service;
 	void change_infos(std::map<std::string,std::string> informations);
 	int publisher_id;
 	float rate;
+	std::string type;
+	std::map<int,int> rates;
 	std::string name;
 	std::string price;
 	std::string year;

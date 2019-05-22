@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <map>
 #include "signup.h"
 #include "film.h"
 #include "user.h"
@@ -16,7 +17,7 @@
 #include "rate.h"
 #include "comment.h"
 #include "comment_service.h"
-#include <map>
+#include "reply_service.h"
 
 class Request{
 public:
@@ -34,10 +35,10 @@ public:
 	void post_rate();
 	void post_comments();
 	void delete_comments();
-	void post_money_publisher(){}
+	void post_replies();
+	void post_money_publisher();
 	void get_followers(){}
 	void get_published(){}
-	void post_replies(){}
 	void get_films_find(){}
 	void get_purchased(){}
 	void get_notification(){}

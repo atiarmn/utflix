@@ -23,3 +23,6 @@ void Comment::delete_comment(User* logedin_user,std::map<std::string,std::string
 	else
 		throw PermissionDen();
 }
+void Comment::post_reply(std::string content){
+	replies.push_back(content);
+}

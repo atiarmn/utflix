@@ -1,7 +1,10 @@
 #include <map>
 #include "film.h"
+#include "user.h"
+
+class User;
 
 class Rate{
 public:
-	void post(std::map<std::string,std::string> informations);
+	void post(User* user,std::map<std::string,std::string> informations);
 };

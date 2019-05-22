@@ -59,7 +59,7 @@ void Request::post_followers(){
 }
 void Request::post_rate(){
 	Rate* rate = new Rate();
-	rate->post(informations);
+	rate->post(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;
 }
 void Request::post_comments(){
@@ -71,4 +71,14 @@ void Request::delete_comments(){
 	Comment* comment = new Comment();
 	comment->delete_comment(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;	
+}
+void Request::post_replies(){
+	ReplyService* reply_service = new ReplyService ();
+	reply_service->post(logedin_user,informations);
+	std::cout<<"OK"<<std::endl;
+}
+void Request::post_money_publisher(){
+	Money* money = new Money();
+	money->post_publisher(logedin_user);
+	std::cout<<"OK"<<std::endl;
 }

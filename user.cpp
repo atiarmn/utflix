@@ -20,6 +20,8 @@ void User::get_login(){
 	login=true;
 }
 void User::buy_film(int film_id,int price){
+	if(film_bought(film_id))
+		return;
 	money-=price;
 	purchased_films.push_back(film_id);
 }

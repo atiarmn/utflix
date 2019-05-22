@@ -10,6 +10,7 @@ void Buy::post(User* logedin_user,std::map<std::string,std::string> informations
 		if(database->get_film(film_id)->deleted())
 			throw NotFound();
 		logedin_user->buy_film(film_id,price);
+		database->add_network_money(price);
 	}
 	else
 		throw NotFound();
