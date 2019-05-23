@@ -10,11 +10,12 @@ class CommentService;
 
 class Comment{
 public:
-	Comment(std::string _content);
+	Comment(std::string _content,int _user_id);
 	Comment(){}
 	void post(User* logedin_user,std::map<std::string,std::string> informations);
 	void delete_comment(User* logedin_user,std::map<std::string,std::string> informations);
 	void set_id(int _id);
+	int get_user_id(){return user_id;}
 	int get_id(){return id;}
 	void post_reply(std::string content);
 	int replies_num(){return replies.size();}
@@ -25,6 +26,7 @@ private:
 	std::vector<std::string> replies;
 	std::string content;
 	int id;
+	int user_id;
 };
 
 #endif

@@ -1,12 +1,13 @@
 #include "comment.h"
 
-Comment::Comment(std::string _content){
+Comment::Comment(std::string _content,int _user_id){
 	service = new CommentService();
 	content=_content;
+	user_id=_user_id;
 }
 void Comment::post(User* logedin_user,std::map<std::string,std::string> informations){
 	if(logedin_user->film_bought(std::stoi(informations["film_id"],nullptr,0)))
-		service->post(this,informations);
+		service->post(this,informations,logedin_user);
 	else 
 		throw BadRequest();
 }

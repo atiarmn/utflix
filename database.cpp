@@ -7,14 +7,10 @@ Database* Database::get_instance() {
       	instance = new Database();
       return instance;
 }
-std::vector<Film*> Database::get_all_films(){
-	return this->films;
-}
-std::vector<User*> Database::get_all_uesers(){
-	return this->users;
-}
+
 void Database::add_film(Film* film){
 	(this->films).push_back(film);
+	sorted_films.push_back(film);
 }
 void Database::add_user(User* user){
 	(this->users).push_back(user);
@@ -91,5 +87,32 @@ void Database::set_publisher_money(User* logedin_user){
 					}
 				}
 			}
+}
+void Database::sort_films_by_rate(User* logedin_user){
+	Film* temp = new Film();
+	for(int i=0;i<sorted_films.size();i++){
+		if(i+1>=sorted_films.size())
+			break;
+		if(logedin_user->film_bought(sorted_films[i]->get_id()))
+			continue;
+		if((sorted_films[i]->get_rate())<(sorted_films[i+1]->get_rate())){
+			temp=sorted_films[i];
+			sorted_films[i]=sorted_films[i+1];
+			sorted_films[i+1]=temp;
+		}
+		else if((sorted_films[i]->get_rate())==(sorted_films[i+1]->get_rate()) && 
+			(std::stoi(sorted_films[i]->get_year(),nullptr,0)>std::stoi(sorted_films[i+1]->get_year(),nullptr,0))){
+			temp=sorted_films[i];
+			sorted_films[i]=sorted_films[i+1];
+			sorted_films[i+1]=temp;
+		}
+	}
+}
+std::vector<Film*> Database::get_sorted_films(User* logedin_user){
+	sort_films_by_rate(logedin_user);
+	return sorted_films;
+}
+std::vector<User*> Database::get_all_users(){
+	return this->users;
 }
 Database::Database() {}

@@ -58,6 +58,8 @@ void InputHandler::handle(){
 	if(input[0]=="PUT"){
 		put();
 	}
+	if(input[0]=="")
+		return;
 	if(input[0]!="POST" && input[0]!="GET" && input[0]!="DELETE" && input[0]!= "PUT")
 		throw BadRequest();
 }
@@ -195,15 +197,15 @@ void InputHandler::get(){
 		input_error_flag=1;
 		request->get_purchased();
 	}
-	if(input[1]=="notification"){
+	if(input[1]=="notifications"){
 		if(input[2]=="read"){
 			if(input[3]!="?" || informations["limit"]=="\0")
 				throw BadRequest();
 			check_num(informations["limit"]);
-			request->get_notification_read();
+			request->get_notifications_read();
 		}
 		input_error_flag=1;
-		request->get_notification();
+		request->get_notifications();
 	}
 	if(input_error_flag==0)
 		throw NotFound();

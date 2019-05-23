@@ -18,6 +18,7 @@
 #include "comment.h"
 #include "comment_service.h"
 #include "reply_service.h"
+#include "notif_service.h"
 
 class Request{
 public:
@@ -37,12 +38,12 @@ public:
 	void delete_comments();
 	void post_replies();
 	void post_money_publisher();
-	void get_followers(){}
+	void get_notifications();
+	void get_notifications_read();
+	void get_followers();
+	void get_films_find();
 	void get_published(){}
-	void get_films_find(){}
 	void get_purchased(){}
-	void get_notification(){}
-	void get_notification_read(){}
 private:
 	std::map<std::string, std::string> informations;
 	User* logedin_user;

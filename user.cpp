@@ -50,4 +50,27 @@ bool User::film_bought(int film_id){
 			return true;
 	return false;
 }
+void User::read(){
+	for(int i =0;i<unread_notifs.size();i++){
+		read_notifs.push_back(unread_notifs[i]);
+		unread_notifs[i]="";
+	}
+	unread_notifs.clear();
+}
+void User::print_unread_notifs(){
+	std::cout<<"#. Notification Message"<<std::endl;
+	for(int i=0 ;i<unread_notifs.size();i++)
+		std::cout<<i+1<<". "<<unread_notifs[i]<<std::endl;
+	read();
+}
+void User::print_read_notifs(int limit){
+	std::cout<<"#. Notification Message"<<std::endl;
+	if(limit>read_notifs.size())
+		limit=read_notifs.size();
+	for(int i=0 ;i<limit;i++)
+		std::cout<<i+1<<". "<<read_notifs[i]<<std::endl;
+}
+void User::add_notif(std::string notif){
+	unread_notifs.push_back(notif);
+}
 

@@ -25,8 +25,6 @@ void Request::post_money_user(){
 	std::cout<<"OK"<<std::endl;
 }
 void Request::post_films(){
-	if(logedin_user==NULL)
-		logedin_user = new User();
 	Film* film = new Film(informations,logedin_user->get_id());
 	film->post(logedin_user);
 	logedin_user->add_film(film->get_id());
@@ -63,7 +61,7 @@ void Request::post_rate(){
 	std::cout<<"OK"<<std::endl;
 }
 void Request::post_comments(){
-	Comment* comment = new Comment(informations["content"]);
+	Comment* comment = new Comment(informations["content"],logedin_user->get_id());
 	comment->post(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;
 }
@@ -81,4 +79,20 @@ void Request::post_money_publisher(){
 	Money* money = new Money();
 	money->post_publisher(logedin_user);
 	std::cout<<"OK"<<std::endl;
+}
+void Request::get_notifications(){
+	NotifService* notif_service = new NotifService();
+	notif_service->get_notifications(logedin_user);
+}
+void Request::get_notifications_read(){
+	NotifService* notif_service = new NotifService();
+	notif_service->get_notifications_read(logedin_user,informations);
+}
+void Request::get_followers(){
+	Followers* followers = new Followers();
+	followers->get(logedin_user);
+}
+void Request::get_films_find(){
+	Film* film = new Film();
+	film->get_films(informations);
 }

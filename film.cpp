@@ -23,7 +23,7 @@ Film::Film(){
 void Film::post(User* logedin_user){
 	if(logedin_user==NULL)
 		throw PermissionDen();
-	service->post(this);
+	service->post(this,logedin_user);
 }
 void Film::put(std::map<std::string,std::string> informations){
 	change_infos(informations);
@@ -52,16 +52,18 @@ void Film::get_detail(User* logedin_user,std::map<std::string,std::string> infor
 	if(logedin_user==NULL)
 		throw PermissionDen();
 	int film_id=std::stoi(informations["film_id"],nullptr,0);
-	service->get(informations);
+	service->get(logedin_user,informations);
 }
-void Film::print_details(){
+void Film::get_films(std::map<std::string,std::string> informations){
+	service->search(informations);
+}
+void Film::print_details(User* logedin_user){
 	std::cout<<"Details of Film "<<name<<std::endl;
 	std::cout<<"Id = "<<id<<std::endl;
 	std::cout<<"Director = "<<director<<std::endl;
 	std::cout<<"Length = "<<length<<std::endl;
 	std::cout<<"Year = "<<year<<std::endl;
 	std::cout<<"Summary = "<<summary<<std::endl;
-	std::cout<<"Director = "<<director<<std::endl;
 	std::cout<<"Rate = "<<rate<<std::endl;
 	std::cout<<"Price = "<<price<<"\n"<<std::endl;
 	std::cout<<"Comments"<<std::endl;
@@ -71,7 +73,18 @@ void Film::print_details(){
 		for(int j=0;j<comments[i]->replies_num();j++)
 			std::cout<<comments[i]->get_reply(j)<<std::endl;
 	}
-
+	std::cout<<"\n";
+	std::cout<<"Recommendation Film"<<std::endl;
+	std::cout<<"#. Film Id | Film Name | Film Length | Film Director"<<std::endl;
+	for(int i=0;i<4;i++){
+		if(i>=(service->recommend(logedin_user)).size())
+			break;
+		std::cout<<i<<'.';
+		std::cout<<(service->recommend(logedin_user))[i]->get_id()<<" | ";
+		std::cout<<(service->recommend(logedin_user))[i]->get_name()<<" | ";
+		std::cout<<(service->recommend(logedin_user))[i]->get_length()<<" | ";
+		std::cout<<(service->recommend(logedin_user))[i]->get_director()<<std::endl;
+	}
 }
 void Film::set_rate(int user_id,int _rate){
 	rates[user_id]=_rate;
@@ -86,8 +99,8 @@ void Film::set_rate(int user_id,int _rate){
 	if(rate<5)
 		type="weak";
 }
-void Film::post_rate(int user_id,std::map<std::string,std::string> informations){
-	service->rate(user_id,informations);
+void Film::post_rate(User* logedin_user,std::map<std::string,std::string> informations){
+	service->rate(logedin_user,informations);
 }
 void Film::post_comment(Comment* new_comment){
 	comments.push_back(new_comment);
@@ -103,4 +116,52 @@ Comment* Film::find_comment(int comment_id){
 		if(comments[i]->get_id()==comment_id)
 			return comments[i];
 	throw NotFound();
+}
+bool Film::check_name(std::string _name){
+	if(_name=="\0")
+		return true;
+	else if(name==_name)
+		return true;
+	else
+		return false;
+}
+bool Film::check_rate(int min_rate){
+	if(min_rate==0)
+		return true;
+	else if(rate>=min_rate)
+		return true;
+	else
+		return false;
+}
+bool Film::check_price(std::string _price){
+	if(_price=="\0")
+			return true;
+	else if(price==_price)
+			return true;
+	else
+			return false;
+}
+bool Film::check_max_year(int max_year){
+	if(max_year==0)
+		return true;
+	else if(std::stoi(year,nullptr,0)<=max_year)
+		return true;
+	else
+		return false;
+}
+bool Film::check_min_year(int min_year){
+	if(min_year==0)
+		return true;
+	else if(std::stoi(year,nullptr,0)<=min_year)
+		return true;
+	else
+		return false;
+}
+bool Film::check_director(std::string _director){
+	if(_director=="\0")
+		return true;
+	else if(director==_director)
+		return true;
+	else
+		return false;
 }
