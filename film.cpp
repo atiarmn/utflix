@@ -91,7 +91,8 @@ void Film::print_details(User* logedin_user){
 	for(int i=0;i<4;i++){
 		if(i>=(service->recommend(logedin_user)).size())
 			break;
-		if((service->recommend(logedin_user))[i]->get_id()==id || service->recommend(logedin_user)[i]->deleted()){
+		if((service->recommend(logedin_user))[i]->get_id()==id || service->recommend(logedin_user)[i]->deleted() || 
+			logedin_user->film_bought(service->recommend(logedin_user)[i]->get_id())){
 			i-1;
 			continue;
 		}
