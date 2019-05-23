@@ -2,6 +2,7 @@
 #define LOGIN_H
 
 #include <map>
+#include <functional>
 #include "exception.h"
 #include "database.h"
 

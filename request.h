@@ -23,6 +23,7 @@
 class Request{
 public:
 	Request();
+	~Request();
 	void get_informations(std::map<std::string,std::string> _informations);
 	void signup();
 	void login();
@@ -42,8 +43,8 @@ public:
 	void get_notifications_read();
 	void get_followers();
 	void get_films_find();
-	void get_published(){}
-	void get_purchased(){}
+	void get_published();
+	void get_purchased();
 private:
 	std::map<std::string, std::string> informations;
 	User* logedin_user;

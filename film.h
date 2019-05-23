@@ -13,8 +13,9 @@ class Comment;
 
 class Film{
 public:
-	Film(std::map<std::string,std::string> informations,int _publisher_id);
+	Film(std::map<std::string,std::string> informations,User* logedin_user);
 	Film();
+	~Film();
 	
 	void post(User* logedin_user);
 	void delete_film(User* logedin_user,std::map<std::string,std::string> informations);
@@ -23,7 +24,9 @@ public:
 	void print_details(User* logedin_user);
 	void post_comment(Comment* new_comment);
 	void get_detail(User* logedin_user,std::map<std::string,std::string> informations);
-	void get_films(std::map<std::string,std::string> informations);
+	void get_films(User* logedin_user,std::map<std::string,std::string> informations);
+	void get_published(User* logedin_user,std::map<std::string,std::string> informations);
+	void get_purchased(User* logedin_user,std::map<std::string,std::string> informations);
 	void post_rate(User* logedin_user,std::map<std::string,std::string> informations);
 	void delete_comment(int comment_id);
 	void set_delete();

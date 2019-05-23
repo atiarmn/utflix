@@ -12,6 +12,7 @@
 class InputHandler{
 public:
 	InputHandler();
+	~InputHandler();
 	void run();
 private:
 	void handle();

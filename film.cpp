@@ -1,16 +1,16 @@
 #include "film.h"
-Film::Film(std::map<std::string,std::string> informations,int _publisher_id){
+Film::Film(std::map<std::string,std::string> informations,User* logedin_user){
+	if(logedin_user==NULL)
+		throw PermissionDen();
 	name=informations["name"];
 	price=informations["price"];
 	year=informations["year"];
 	length=informations["length"];
 	summary=informations["summary"];
 	director=informations["director"];
-	publisher_id=_publisher_id;
+	publisher_id=logedin_user->get_id();
 	rate=0;
 	is_deleted=false;
-	if(publisher_id==0)
-		throw PermissionDen();
 	point=0;
 	Database* database = database->get_instance();
 	id=database->find_last_film()+1;
@@ -19,6 +19,9 @@ Film::Film(std::map<std::string,std::string> informations,int _publisher_id){
 Film::Film(){
 	point=0;
 	service=new	FilmService();
+}
+Film::~Film(){
+	delete service;
 }
 void Film::post(User* logedin_user){
 	if(logedin_user==NULL)
@@ -51,11 +54,20 @@ void Film::delete_film(User* logedin_user,std::map<std::string,std::string> info
 void Film::get_detail(User* logedin_user,std::map<std::string,std::string> informations){
 	if(logedin_user==NULL)
 		throw PermissionDen();
-	int film_id=std::stoi(informations["film_id"],nullptr,0);
 	service->get(logedin_user,informations);
 }
-void Film::get_films(std::map<std::string,std::string> informations){
-	service->search(informations);
+void Film::get_films(User* logedin_user,std::map<std::string,std::string> informations){
+	if(logedin_user==NULL)
+		throw PermissionDen();
+	service->search(logedin_user,informations,"films");
+}
+void Film::get_published(User* logedin_user,std::map<std::string,std::string> informations){
+	if(!(logedin_user->get_type()))
+		throw PermissionDen();
+	service->search(logedin_user,informations,"published");
+}
+void Film::get_purchased(User* logedin_user,std::map<std::string,std::string> informations){
+	service->get_purchased(logedin_user,informations);
 }
 void Film::print_details(User* logedin_user){
 	std::cout<<"Details of Film "<<name<<std::endl;
@@ -79,7 +91,11 @@ void Film::print_details(User* logedin_user){
 	for(int i=0;i<4;i++){
 		if(i>=(service->recommend(logedin_user)).size())
 			break;
-		std::cout<<i<<'.';
+		if((service->recommend(logedin_user))[i]->get_id()==id || service->recommend(logedin_user)[i]->deleted()){
+			i-1;
+			continue;
+		}
+		std::cout<<i+1<<" .";
 		std::cout<<(service->recommend(logedin_user))[i]->get_id()<<" | ";
 		std::cout<<(service->recommend(logedin_user))[i]->get_name()<<" | ";
 		std::cout<<(service->recommend(logedin_user))[i]->get_length()<<" | ";
@@ -152,7 +168,7 @@ bool Film::check_max_year(int max_year){
 bool Film::check_min_year(int min_year){
 	if(min_year==0)
 		return true;
-	else if(std::stoi(year,nullptr,0)<=min_year)
+	else if(std::stoi(year,nullptr,0)>=min_year)
 		return true;
 	else
 		return false;

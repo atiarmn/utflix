@@ -17,6 +17,52 @@ void FilmService::put(User* logedin_user,std::map<std::string,std::string> infor
 	else
 		throw NotFound();
 }
+void FilmService::search(User* logedin_user,std::map<std::string,std::string> informations,std::string input){
+	Database* database = database->get_instance();
+	std::string name,director,price;
+	int min_rate,min_year,max_year,num=1;
+	name=informations["name"];
+	if(informations["min_rate"]=="\0")
+		min_rate=0;
+	else
+		min_rate=std::stoi(informations["min_rate"],nullptr,0);
+	if(informations["min_year"]=="\0")
+		min_year=0;
+	else
+		min_year=std::stoi(informations["min_year"],nullptr,0);
+	price=informations["price"];
+	if(informations["max_year"]=="\0")
+		max_year=0;
+	else
+		max_year=std::stoi(informations["max_year"],nullptr,0);
+	director=informations["director"];
+
+	std::cout<<"#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director"<<std::endl;
+	for(int i=0;i<(database->get_all_users()).size();i++){
+		if(input=="published"){
+			if((database->get_all_users())[i]->get_id()!=logedin_user->get_id())
+				continue;
+		}
+		if(!((database->get_all_users())[i]->get_type()))
+			continue;
+		for(int j=0;j<(database->get_sorted_films_by_id((database->get_all_users())[i]).size());j++){
+			if(input=="published"){
+				if(database->get_sorted_films_by_id((database->get_all_users())[i])[j]->get_publisher_id()!=logedin_user->get_id())
+					continue;
+			}
+			if(database->get_sorted_films_by_id((database->get_all_users())[i])[j]->check_name(name) &&
+			database->get_sorted_films_by_id((database->get_all_users())[i])[j]->check_rate(min_rate) &&
+			database->get_sorted_films_by_id((database->get_all_users())[i])[j]->check_min_year(min_year) &&
+			database->get_sorted_films_by_id((database->get_all_users())[i])[j]->check_max_year(max_year) &&
+			database->get_sorted_films_by_id((database->get_all_users())[i])[j]->check_price(price) &&
+			database->get_sorted_films_by_id((database->get_all_users())[i])[j]->check_director(director) &&
+			!(database->get_sorted_films_by_id((database->get_all_users())[i])[j]->deleted())){
+				print(database->get_sorted_films_by_id((database->get_all_users())[i])[j],num);
+				num++;
+			}
+		}
+	}
+}
 void FilmService::delete_film(std::map<std::string,std::string> informations){
 	int film_id=std::stoi(informations["film_id"],nullptr,0);
 	Database* database = database->get_instance();
@@ -38,43 +84,6 @@ void FilmService::get(User* logedin_user,std::map<std::string,std::string> infor
 	}
 	else
 		throw NotFound();
-}
-void FilmService::search(std::map<std::string,std::string> informations){
-	Database* database = database->get_instance();
-	std::string name,director,price;
-	int min_rate,min_year,max_year,num=1;
-	name=informations["name"];
-	if(informations["min_rate"]=="\0")
-		min_rate=0;
-	else
-		min_rate=std::stoi(informations["min_rate"],nullptr,0);
-	if(informations["min_year"]=="\0")
-		min_year=0;
-	else
-		min_year=std::stoi(informations["min_year"],nullptr,0);
-	price=informations["price"];
-	if(informations["max_year"]=="\0")
-		max_year=0;
-	else
-		max_year=std::stoi(informations["max_year"],nullptr,0);
-	director=informations["director"];
-	std::cout<<"#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director"<<std::endl;
-	for(int i=0;i<(database->get_all_users()).size();i++){
-		if(!((database->get_all_users())[i]->get_type()))
-			continue;
-		for(int j=0;j<(database->get_sorted_films((database->get_all_users())[i]).size());j++){
-			if(database->get_sorted_films((database->get_all_users())[i])[j]->check_name(name) &&
-			database->get_sorted_films((database->get_all_users())[i])[j]->check_rate(min_rate) &&
-			database->get_sorted_films((database->get_all_users())[i])[j]->check_min_year(min_year)&&
-			database->get_sorted_films((database->get_all_users())[i])[j]->check_max_year(max_year)&&
-			database->get_sorted_films((database->get_all_users())[i])[j]->check_price(price)&&
-			database->get_sorted_films((database->get_all_users())[i])[j]->check_director(director)){
-				print(database->get_sorted_films((database->get_all_users())[i])[j],num);
-				num++;
-			}
-
-		}
-	}
 }
 void FilmService::print(Film* film,int num){
 	std::cout<<num<<". ";
@@ -114,5 +123,32 @@ void FilmService::rate(User* logedin_user,std::map<std::string,std::string> info
 }
 std::vector<Film*> FilmService::recommend(User* logedin_user){
 	Database* database = database->get_instance();
-	return database->get_sorted_films(logedin_user);
+	return database->get_sorted_films_by_rate(logedin_user);
+}
+void FilmService::get_purchased(User* logedin_user,std::map<std::string,std::string> informations){
+	Database* database = database->get_instance();
+	std::string name,director,price;
+	int min_year,max_year,num=1;
+	name=informations["name"];
+	if(informations["min_year"]=="\0")
+		min_year=0;
+	else
+		min_year=std::stoi(informations["min_year"],nullptr,0);
+	price=informations["price"];
+	if(informations["max_year"]=="\0")
+		max_year=0;
+	else
+		max_year=std::stoi(informations["max_year"],nullptr,0);
+	director=informations["director"];
+	std::cout<<"#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director"<<std::endl;
+	for(int i=0;i<(logedin_user->get_sorted_purchased()).size();i++){
+		if(database->get_film((logedin_user->get_sorted_purchased())[i])->check_name(name) &&
+			database->get_film((logedin_user->get_sorted_purchased())[i])->check_min_year(min_year) &&
+			database->get_film((logedin_user->get_sorted_purchased())[i])->check_max_year(max_year) &&
+			database->get_film((logedin_user->get_sorted_purchased())[i])->check_price(price) &&
+			database->get_film((logedin_user->get_sorted_purchased())[i])->check_director(director) &&
+			!(database->get_film((logedin_user->get_sorted_purchased())[i])->deleted())){
+				print(database->get_film((logedin_user->get_sorted_purchased())[i]),i+1);
+			}
+	}
 }

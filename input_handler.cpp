@@ -4,6 +4,9 @@
 InputHandler::InputHandler(){
 	request = new Request();
 }
+InputHandler::~InputHandler(){
+	delete request;
+}
 void InputHandler::run(){
 	std::string line;
 	while(std::getline(std::cin,line)){
@@ -55,9 +58,8 @@ void InputHandler::handle(){
 		get();
 	if(input[0]=="DELETE")
 		delete_func();
-	if(input[0]=="PUT"){
+	if(input[0]=="PUT")
 		put();
-	}
 	if(input[0]=="")
 		return;
 	if(input[0]!="POST" && input[0]!="GET" && input[0]!="DELETE" && input[0]!= "PUT")
@@ -71,10 +73,11 @@ void InputHandler::check_email(std::string email){
 		}
 }
 void InputHandler::check_num(std::string num){
-	for(int i=0;i<num.size();i++)
-		if(num[i]>57 || num[i]<48){
+	for(int i=0;i<num.size();i++){
+			if(num[i]>57 || num[i]<48){
 			throw BadRequest();
 		}
+	}
 }
 void InputHandler::post(){
 	int input_error_flag=0;
@@ -174,10 +177,6 @@ void InputHandler::get(){
 		request->get_followers();
 	}
 	if(input[1]=="films"){
-		if(input[2]!="?")
-			throw BadRequest();
-		if(input.size()==3)
-			request->get_films_find();
 		if(input[3]=="film_id"){
 			check_num(informations["film_id"]);
 			request->get_films_detail();
@@ -187,25 +186,23 @@ void InputHandler::get(){
 		input_error_flag=1;
 	}
 	if(input[1]=="published"){
-		if(input[2]!="?")
-			throw BadRequest();
 		request->get_published();
+		input_error_flag=1;
 	}
 	if(input[1]=="purchased"){
-		if(input[2]!="?")
-			throw BadRequest();
 		input_error_flag=1;
 		request->get_purchased();
 	}
 	if(input[1]=="notifications"){
 		if(input[2]=="read"){
-			if(input[3]!="?" || informations["limit"]=="\0")
+			if(informations["limit"]=="\0")
 				throw BadRequest();
 			check_num(informations["limit"]);
 			request->get_notifications_read();
 		}
+		else
+			request->get_notifications();
 		input_error_flag=1;
-		request->get_notifications();
 	}
 	if(input_error_flag==0)
 		throw NotFound();

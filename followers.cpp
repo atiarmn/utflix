@@ -3,6 +3,8 @@
 void Followers::post(User* logedin_user, std::map<std::string,std::string> informations){
 	int user_id=std::stoi(informations["user_id"],nullptr,0);
 	Database* database = database->get_instance();
+	if(logedin_user==NULL)
+		throw BadRequest();
 	if(database->existed_user_id(user_id)){
 		User* user = database->get_user_by_id(user_id);
 		if(user->get_type()){
@@ -25,6 +27,8 @@ void Followers::post(User* logedin_user, std::map<std::string,std::string> infor
 		throw NotFound();
 }
 void Followers::get(User* logedin_user){
+	if(logedin_user==NULL)
+		throw PermissionDen();
 	if(!(logedin_user->get_type()))
 		throw PermissionDen();
 	Database* database = database->get_instance();

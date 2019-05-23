@@ -18,7 +18,8 @@ public:
 	void delete_film(std::map<std::string,std::string> informations);
 	void get(User* logedin_user,std::map<std::string,std::string> informations);
 	void rate(User* logedin_user,std::map<std::string,std::string> informations);
-	void search(std::map<std::string,std::string> informations);
+	void search(User* logedin_user,std::map<std::string,std::string> informations,std::string input);
+	void get_purchased(User* logedin_user,std::map<std::string,std::string> informations);
 	std::vector<Film*> recommend(User* logedin_user);
 	void print(Film* film,int num);
 };

@@ -1,8 +1,10 @@
 #include "user.h"
 User::User(std::map<std::string,std::string> _informations){
 	informations=_informations;
+	std::boolalpha;
+	std::hash<std::string> hash_pass;
 	username=informations["username"];
-	password=informations["password"];
+	password=hash_pass(informations["password"]);
 	email=informations["email"];
 	age=informations["age"];
 	money = 0;
@@ -35,12 +37,6 @@ bool User::existed_follower(int pub_id){
 			return true;
 	return false;
 }
-std::string User::get_username(){
-	return username;
-}
-std::string User::get_password(){
-	return password;
-}
 void User::add_money(int amount){
 	money+=amount;
 }
@@ -59,8 +55,11 @@ void User::read(){
 }
 void User::print_unread_notifs(){
 	std::cout<<"#. Notification Message"<<std::endl;
-	for(int i=0 ;i<unread_notifs.size();i++)
-		std::cout<<i+1<<". "<<unread_notifs[i]<<std::endl;
+	int num=1;
+	for(int i=unread_notifs.size();i>=0;i--){
+		std::cout<<num<<". "<<unread_notifs[i]<<std::endl;
+		num++;
+	}
 	read();
 }
 void User::print_read_notifs(int limit){
@@ -73,4 +72,16 @@ void User::print_read_notifs(int limit){
 void User::add_notif(std::string notif){
 	unread_notifs.push_back(notif);
 }
-
+std::vector<int> User::get_sorted_purchased(){
+	int temp;
+	for(int i=0;i<purchased_films.size();i++){
+		if(i+1>=purchased_films.size())
+			break;
+		if(purchased_films[i]>purchased_films[i+1]){
+			temp=purchased_films[i];
+			purchased_films[i]=purchased_films[i+1];
+			purchased_films[i+1]=temp;
+		}
+	}
+	return purchased_films;
+}

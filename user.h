@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <functional>
 #include <map>
 
 #define USER 0
@@ -18,13 +19,15 @@ public:
 	User(std::map<std::string,std::string> _informations);
 	User();
 
-	std::string get_username();
-	std::string get_password();
+	std::string get_username(){return username;}
+	std::string get_password(){return password;}
+	std::string get_email(){return email;}
 
+	std::vector<int> get_sorted_purchased();
+	
 	int get_type(){return type;}
 	int get_id(){return id;}
 	int get_money(){return money;}
-	std::string get_email(){return email;}
 
 	void get_login();
 	void buy_film(int film_id,int price);
@@ -43,6 +46,7 @@ public:
 	virtual void add_follower(int user_id){}
 	virtual void send_notif_to_followers(){}
 	virtual std::vector<int> get_followers(){throw PermissionDen();}
+
 protected:
 	void read();
 	int type;

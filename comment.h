@@ -12,6 +12,7 @@ class Comment{
 public:
 	Comment(std::string _content,int _user_id);
 	Comment(){}
+	~Comment();
 	void post(User* logedin_user,std::map<std::string,std::string> informations);
 	void delete_comment(User* logedin_user,std::map<std::string,std::string> informations);
 	void set_id(int _id);

@@ -14,7 +14,7 @@ public:
 	void add_follower(int user_id);
 	void delete_film(int film_id);
 	void send_notif_to_followers();
-
+		
 	std::vector<int> get_followers(){return followers;}
 
 	bool find_film(int film_id);

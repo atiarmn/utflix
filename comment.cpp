@@ -5,6 +5,9 @@ Comment::Comment(std::string _content,int _user_id){
 	content=_content;
 	user_id=_user_id;
 }
+Comment::~Comment(){
+	delete service;
+}
 void Comment::post(User* logedin_user,std::map<std::string,std::string> informations){
 	if(logedin_user->film_bought(std::stoi(informations["film_id"],nullptr,0)))
 		service->post(this,informations,logedin_user);
@@ -19,7 +22,7 @@ void Comment::delete_comment(User* logedin_user,std::map<std::string,std::string
 		if(logedin_user->find_film(std::stoi(informations["film_id"],nullptr,0)))
 			service->delete_comment(informations);
 		else
-			throw BadRequest();
+			throw NotFound();
 	}
 	else
 		throw PermissionDen();

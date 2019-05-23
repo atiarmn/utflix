@@ -2,7 +2,9 @@
 Request::Request(){
 	std::map<std::string,std::string> informations ();
 }
-using namespace std;
+Request::~Request(){
+	delete logedin_user;
+}
 void Request::get_informations(std::map<std::string,std::string> _informations){
 	informations.clear();
 	informations = _informations;
@@ -25,7 +27,7 @@ void Request::post_money_user(){
 	std::cout<<"OK"<<std::endl;
 }
 void Request::post_films(){
-	Film* film = new Film(informations,logedin_user->get_id());
+	Film* film = new Film(informations,logedin_user);
 	film->post(logedin_user);
 	logedin_user->add_film(film->get_id());
 	std::cout<<"OK"<<std::endl;
@@ -94,5 +96,13 @@ void Request::get_followers(){
 }
 void Request::get_films_find(){
 	Film* film = new Film();
-	film->get_films(informations);
+	film->get_films(logedin_user,informations);
+}
+void Request::get_published(){
+	Film* film = new Film();
+	film->get_published(logedin_user,informations);
+}
+void Request::get_purchased(){
+	Film* film = new Film();
+	film ->get_purchased(logedin_user,informations);
 }

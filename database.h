@@ -11,6 +11,8 @@ class Film;
 
 class Database{
 public:
+	~Database();
+	
 	static Database* get_instance();
 
 	void add_film(Film* film);
@@ -31,11 +33,13 @@ public:
 	Film* get_film(int film_id);
 	Film* best_film();
 	
-	std::vector<Film*> get_sorted_films(User* logedin_user);
+	std::vector<Film*> get_sorted_films_by_id(User* logedin_user);
+	std::vector<Film*> get_sorted_films_by_rate(User* logedin_user);
 	std::vector<User*> get_all_users();
 private:
 	static Database* instance;
 	void sort_films_by_rate(User* logedin_user);
+	void sort_films_by_id(User* logedin_user);
 	float network_money;
 	std::vector<Film*>sorted_films;
 	std::vector<Film*> films;
