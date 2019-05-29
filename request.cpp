@@ -1,9 +1,16 @@
 #include "request.h"
 Request::Request(){
 	std::map<std::string,std::string> informations ();
+	Database* database = database->get_instance();
+	std::map<std::string,std::string> admin_informations;
+	admin_informations["username"]="admin";
+	admin_informations["password"]="admin";
+	admin = new User(admin_informations);
+	database->add_user(admin);
 }
 Request::~Request(){
 	delete logedin_user;
+	delete admin;
 }
 void Request::get_informations(std::map<std::string,std::string> _informations){
 	informations.clear();
@@ -11,14 +18,12 @@ void Request::get_informations(std::map<std::string,std::string> _informations){
 }
 void Request::signup(){
 	Signup* signup = new Signup();
-	logedin_user = new User(informations);
-	logedin_user = signup->post(informations);
+	logedin_user = signup->post(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;
 }
 void Request::login(){
 	Login* login = new	Login();
-	logedin_user = new User(informations);
-	logedin_user = login->post(informations);
+	logedin_user = login->post(logedin_user,informations);
 	std::cout<<"OK"<<std::endl;
 }
 void Request::post_money_user(){
@@ -104,5 +109,14 @@ void Request::get_published(){
 }
 void Request::get_purchased(){
 	Film* film = new Film();
-	film ->get_purchased(logedin_user,informations);
+	film->get_purchased(logedin_user,informations);
+}
+void Request::logout(){
+	Logout* logout = new Logout();
+	logedin_user=logout->post(logedin_user);
+	std::cout<<"OK"<<std::endl;
+}
+void Request::get_money(){
+	Money* money = new Money();
+	money->get(logedin_user);
 }

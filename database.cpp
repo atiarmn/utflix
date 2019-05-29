@@ -13,6 +13,10 @@ Database::~Database(){
 void Database::add_film(Film* film){
 	(this->films).push_back(film);
 	sorted_films.push_back(film);
+	for(int i =0;i<recommend_matrix.size();i++)
+		recommend_matrix[i].push_back(0);
+	std::vector<int> new_film(films.size(),0);
+	recommend_matrix.push_back(new_film);
 }
 void Database::add_user(User* user){
 	(this->users).push_back(user);
@@ -45,9 +49,10 @@ bool Database::existed_film(int film_id){
 	return false;
 }
 bool Database::correct_password(std::string username,std::string password){
-	for(int i=0;i<users.size();i++)
+	for(int i=0;i<users.size();i++){
 		if(users[i]->get_username()==username && users[i]->get_password()==password)
 			return true;
+	}
 	return false;
 }
 User* Database::get_user(std::string username){
@@ -90,21 +95,6 @@ void Database::set_publisher_money(User* logedin_user){
 				}
 			}
 }
-void Database::sort_films_by_rate(User* logedin_user){
-	sort_films_by_id(logedin_user);
-	Film* temp = new Film();
-	for(int i=0;i<sorted_films.size();i++){
-		if(i+1>=sorted_films.size())
-			break;
-		if(logedin_user->film_bought(sorted_films[i]->get_id()))
-			continue;
-		if((sorted_films[i]->get_rate())<(sorted_films[i+1]->get_rate())){
-			temp=sorted_films[i];
-			sorted_films[i]=sorted_films[i+1];
-			sorted_films[i+1]=temp;
-		}
-	}
-}
 void Database::sort_films_by_id(User* logedin_user){
 	Film* temp = new Film();
 	for(int i=0;i<sorted_films.size();i++){
@@ -117,9 +107,28 @@ void Database::sort_films_by_id(User* logedin_user){
 		}
 	}
 }
-std::vector<Film*> Database::get_sorted_films_by_rate(User* logedin_user){
-	sort_films_by_rate(logedin_user);
-	return sorted_films;
+std::vector<int> Database::recommend(int film_id){
+	std::vector<int> weight_of_edges;
+	for(int i=0;i<recommend_matrix[film_id-1].size();i++)
+		weight_of_edges.push_back(recommend_matrix[film_id-1][i]);
+	std::vector<std::pair<int,int>> copy_weights;
+	for(int j=0;j<recommend_matrix[film_id-1].size();j++)
+		copy_weights.push_back(std::make_pair(recommend_matrix[film_id-1][j],j+1));
+	std::sort(copy_weights.begin(),copy_weights.end());
+	std::vector<int> recommend_films;
+	std::pair <int,int> temp; 
+	for(int j=0;j<copy_weights.size();j++){
+		for(int i=0;i<copy_weights.size();i++){
+			if(copy_weights[i].first==copy_weights[i+1].first && copy_weights[i].second<copy_weights[i+1].second){
+				temp=copy_weights[i];
+				copy_weights[i]=copy_weights[i+1];
+				copy_weights[i+1]=temp;
+			}	
+		}
+	}
+	for(int i=0;i<copy_weights.size();i++)
+		recommend_films.push_back(copy_weights[i].second);
+	return recommend_films;
 }
 std::vector<Film*> Database::get_sorted_films_by_id(User* logedin_user){
 	sort_films_by_id(logedin_user);
@@ -127,5 +136,21 @@ std::vector<Film*> Database::get_sorted_films_by_id(User* logedin_user){
 }
 std::vector<User*> Database::get_all_users(){
 	return this->users;
+}
+void Database::add_to_recommends(User* logedin_user,int new_film_id){
+	for(int i=0;i<recommend_matrix.size();i++){
+		if(logedin_user->film_bought(i+1)){
+			if(new_film_id==i)
+				continue;
+			recommend_matrix[i][new_film_id-1]++;
+			recommend_matrix[new_film_id-1][i]++;
+		}
+	}
+}
+void Database::remove_from_recommend(int film_id){
+	for(int i=0;i<recommend_matrix.size();i++){
+		recommend_matrix[i][film_id]=0;
+		recommend_matrix[film_id][i]=0;
+	}
 }
 Database::Database() {}

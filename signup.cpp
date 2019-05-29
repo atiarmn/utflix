@@ -1,8 +1,10 @@
 #include "signup.h"
 
 
-User* Signup::post(std::map<std::string,std::string> informations){
+User* Signup::post(User* logedin_user,std::map<std::string,std::string> informations){
 	Database* database = database->get_instance();
+	if(logedin_user!=NULL)
+		throw BadRequest();
 	if(database->existed_username(informations["username"]))
 		throw BadRequest();
 	if(informations["publisher"]=="true"){

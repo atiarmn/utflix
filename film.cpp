@@ -70,6 +70,7 @@ void Film::get_purchased(User* logedin_user,std::map<std::string,std::string> in
 	service->get_purchased(logedin_user,informations);
 }
 void Film::print_details(User* logedin_user){
+	int count=1;
 	std::cout<<"Details of Film "<<name<<std::endl;
 	std::cout<<"Id = "<<id<<std::endl;
 	std::cout<<"Director = "<<director<<std::endl;
@@ -88,20 +89,29 @@ void Film::print_details(User* logedin_user){
 	std::cout<<"\n";
 	std::cout<<"Recommendation Film"<<std::endl;
 	std::cout<<"#. Film Id | Film Name | Film Length | Film Director"<<std::endl;
-	for(int i=0;i<4;i++){
-		if(i>=(service->recommend(logedin_user)).size())
+	std::vector<Film*> recommend_films;
+	for(int i=0;i<(service->recommend(id)).size();i++)
+		recommend_films.push_back(service->recommend(id)[i]);
+	for(int i=0;i<recommend_films.size();i++){
+		if(count>4)
 			break;
-		if((service->recommend(logedin_user))[i]->get_id()==id || service->recommend(logedin_user)[i]->deleted() || 
-			logedin_user->film_bought(service->recommend(logedin_user)[i]->get_id())){
-			i-1;
+		if(recommend_films[i]->get_id()==id ||
+			recommend_films[i]->deleted() || 
+			logedin_user->film_bought(recommend_films[i]->get_id())){
 			continue;
 		}
-		std::cout<<i+1<<" .";
-		std::cout<<(service->recommend(logedin_user))[i]->get_id()<<" | ";
-		std::cout<<(service->recommend(logedin_user))[i]->get_name()<<" | ";
-		std::cout<<(service->recommend(logedin_user))[i]->get_length()<<" | ";
-		std::cout<<(service->recommend(logedin_user))[i]->get_director()<<std::endl;
+		std::cout<<count<<". ";
+		std::cout<<recommend_films[i]->get_id()<<" | ";
+		std::cout<<recommend_films[i]->get_name()<<" | ";
+		std::cout<<recommend_films[i]->get_length()<<" | ";
+		std::cout<<recommend_films[i]->get_director()<<std::endl;
+		count++;
+
+		
 	}
+}
+void Film::set_type(std::string _type){
+	type=_type;
 }
 void Film::set_rate(int user_id,int _rate){
 	rates[user_id]=_rate;
@@ -109,12 +119,6 @@ void Film::set_rate(int user_id,int _rate){
 	for(auto it = rates.begin();it!=rates.end();it++)
 		rate=(rate+rates[it->first]);
 	rate=rate/rates.size();
-	if(rate>=8)
-		type="good";
-	if(rate>=5 && rate<8)
-		type="avarage";
-	if(rate<5)
-		type="weak";
 }
 void Film::post_rate(User* logedin_user,std::map<std::string,std::string> informations){
 	service->rate(logedin_user,informations);

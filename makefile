@@ -2,8 +2,8 @@ CC = g++ --std=c++11
 
 all: 1.out
 
-1.out: main.o input_handler.o request.o signup.o database.o user.o publisher.o login.o money.o film.o film_service.o buy.o followers.o rate.o comment.o comment_service.o reply_service.o notif_service.o
-	$(CC) main.o input_handler.o request.o database.o user.o publisher.o signup.o login.o money.o film.o film_service.o buy.o followers.o rate.o comment.o comment_service.o reply_service.o notif_service.o -o 1.out
+1.out: main.o input_handler.o request.o signup.o database.o user.o publisher.o login.o money.o film.o film_service.o buy.o followers.o rate.o comment.o comment_service.o reply_service.o notif_service.o logout.o
+	$(CC) main.o input_handler.o request.o database.o user.o publisher.o signup.o login.o money.o film.o film_service.o buy.o followers.o rate.o comment.o comment_service.o reply_service.o notif_service.o logout.o -o 1.out
 
 main.o: main.cpp input_handler.h
 	$(CC) -c main.cpp -o main.o
@@ -11,7 +11,7 @@ main.o: main.cpp input_handler.h
 input_handler.o: input_handler.cpp input_handler.h request.h exception.h
 	$(CC) -c input_handler.cpp -o input_handler.o
 
-request.o: request.cpp request.h exception.h signup.h user.h login.h money.h film.h film_service.h buy.h followers.h rate.h comment.h comment_service.h notif_service.h
+request.o: request.cpp request.h exception.h signup.h user.h login.h money.h film.h film_service.h buy.h followers.h rate.h comment.h comment_service.h notif_service.h logout.h
 	$(CC) -c request.cpp -o request.o
 
 signup.o: signup.cpp signup.h database.h exception.h user.h publisher.h
@@ -59,6 +59,9 @@ reply_service.o: reply_service.cpp reply_service.h user.h comment.h film.h excep
 notif_service.o: notif_service.cpp notif_service.h user.h exception.h
 	$(CC) -c notif_service.cpp -o notif_service.o
 
+logout.o:logout.cpp logout.h exception.h user.h
+	$(CC) -c logout.cpp -o logout.o
+	
 .PHONY: clean
 clean:
 	rm *.o

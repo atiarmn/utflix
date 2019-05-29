@@ -4,6 +4,7 @@
 #include "film.h"
 #include <string>
 #include <map>
+#include <iomanip>
 #include "database.h"
 #include "exception.h"
 #include "user.h"
@@ -20,7 +21,7 @@ public:
 	void rate(User* logedin_user,std::map<std::string,std::string> informations);
 	void search(User* logedin_user,std::map<std::string,std::string> informations,std::string input);
 	void get_purchased(User* logedin_user,std::map<std::string,std::string> informations);
-	std::vector<Film*> recommend(User* logedin_user);
+	std::vector<Film*> recommend(int film_id);
 	void print(Film* film,int num);
 };
 

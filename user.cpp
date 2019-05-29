@@ -9,7 +9,10 @@ User::User(std::map<std::string,std::string> _informations){
 	age=informations["age"];
 	money = 0;
 	Database* database = database->get_instance();
-	id=database->find_last_user()+1;
+	if(username=="admin")
+		id=0;
+	else
+		id=database->find_last_user();
 	if(informations["publisher"]=="true")
 		type=PUBLISHER;
 	else
@@ -17,15 +20,23 @@ User::User(std::map<std::string,std::string> _informations){
 }
 User::User(){
 	id=0;
+	money = 0;
 }
 void User::get_login(){
 	login=true;
 }
 void User::buy_film(int film_id,int price){
+	Database* database = database->get_instance();
 	if(film_bought(film_id))
 		return;
 	money-=price;
 	purchased_films.push_back(film_id);
+	if(database->get_film(film_id)->get_rate()>=8)
+		database->get_film(film_id)->set_type("good");
+	if(database->get_film(film_id)->get_rate()>=5 && database->get_film(film_id)->get_rate()<8)
+		database->get_film(film_id)->set_type("avarage");
+	if(database->get_film(film_id)->get_rate()<5)
+		database->get_film(film_id)->set_type("weak");
 }
 
 void User::follow_publisher(int pub_id){
@@ -56,7 +67,7 @@ void User::read(){
 void User::print_unread_notifs(){
 	std::cout<<"#. Notification Message"<<std::endl;
 	int num=1;
-	for(int i=unread_notifs.size();i>=0;i--){
+	for(int i=unread_notifs.size()-1;i>=0;i--){
 		std::cout<<num<<". "<<unread_notifs[i]<<std::endl;
 		num++;
 	}

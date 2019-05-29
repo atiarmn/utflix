@@ -56,10 +56,6 @@ void InputHandler::handle(){
 		post();
 	if(input[0]=="GET")
 		get();
-	if(input[0]=="DELETE")
-		delete_func();
-	if(input[0]=="PUT")
-		put();
 	if(input[0]=="")
 		return;
 	if(input[0]!="POST" && input[0]!="GET" && input[0]!="DELETE" && input[0]!= "PUT")
@@ -155,21 +151,47 @@ void InputHandler::post(){
 		request->post_comments();
 		input_error_flag=1;
 	}
-	if(input_error_flag==0)
-		throw NotFound();
-}
-void InputHandler::put(){
-	int input_error_flag=0;
-	if(input[1]=="films"){
+	if(input[1]=="logout"){
+		request->logout();
+		input_error_flag=1;
+	}
+	if(input[1]=="put_films"){
 		if(informations["film_id"]=="\0" || input[2]!="?")
 			throw BadRequest();
 		check_num(informations["film_id"]);
 		request->put_films();
 		input_error_flag=1;
 	}
+	if(input[1]=="delete_films"){
+		if(informations["film_id"]=="\0" || input[2]!="?")
+			throw BadRequest();
+		check_num(informations["film_id"]);
+		request->delete_films();
+		input_error_flag=1;
+	}
+	if(input[1]=="delete_comments"){
+		if(informations["film_id"]=="\0" || informations["comment_id"]=="\0" || input[2]!="?")
+			throw BadRequest();
+		check_num(informations["film_id"]);
+		check_num(informations["comment_id"]);
+		request->delete_comments();
+		input_error_flag=1;
+	}
 	if(input_error_flag==0)
-		throw BadRequest();
+		throw NotFound();
 }
+// void InputHandler::put(){
+// 	int input_error_flag=0;
+// 	if(input[1]=="films"){
+// 		if(informations["film_id"]=="\0" || input[2]!="?")
+// 			throw BadRequest();
+// 		check_num(informations["film_id"]);
+// 		request->put_films();
+// 		input_error_flag=1;
+// 	}
+// 	if(input_error_flag==0)
+// 		throw BadRequest();
+// }
 void InputHandler::get(){
 	int input_error_flag=0;
 	if(input[1]=="followers"){
@@ -204,26 +226,30 @@ void InputHandler::get(){
 			request->get_notifications();
 		input_error_flag=1;
 	}
-	if(input_error_flag==0)
-		throw NotFound();
-}
-void InputHandler::delete_func(){
-	int input_error_flag=0;
-	if(input[1]=="films"){
-		if(informations["film_id"]=="\0" || input[2]!="?")
-			throw BadRequest();
-		check_num(informations["film_id"]);
-		request->delete_films();
-		input_error_flag=1;
-	}
-	if(input[1]=="comments"){
-		if(informations["film_id"]=="\0" || informations["comment_id"]=="\0" || input[2]!="?")
-			throw BadRequest();
-		check_num(informations["film_id"]);
-		check_num(informations["comment_id"]);
-		request->delete_comments();
+	if(input[1]=="money"){
+		request->get_money();
 		input_error_flag=1;
 	}
 	if(input_error_flag==0)
 		throw NotFound();
 }
+// void InputHandler::delete_func(){
+	// int input_error_flag=0;
+	// if(input[1]=="films"){
+	// 	if(informations["film_id"]=="\0" || input[2]!="?")
+	// 		throw BadRequest();
+	// 	check_num(informations["film_id"]);
+	// 	request->delete_films();
+	// 	input_error_flag=1;
+	// }
+	// if(input[1]=="comments"){
+	// 	if(informations["film_id"]=="\0" || informations["comment_id"]=="\0" || input[2]!="?")
+	// 		throw BadRequest();
+	// 	check_num(informations["film_id"]);
+	// 	check_num(informations["comment_id"]);
+	// 	request->delete_comments();
+	// 	input_error_flag=1;
+	// }
+	// if(input_error_flag==0)
+	// 	throw NotFound();
+// }

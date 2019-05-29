@@ -69,6 +69,7 @@ void FilmService::delete_film(std::map<std::string,std::string> informations){
 	if(database->existed_film(film_id)){
 		Film* film=database->get_film(film_id);
 		film->set_delete();
+		database->remove_from_recommend(film_id);
 	}
 	else 
 		throw NotFound(); 	
@@ -91,7 +92,7 @@ void FilmService::print(Film* film,int num){
 	std::cout<<film->get_name()<<" | ";
 	std::cout<<film->get_length()<<" | ";
 	std::cout<<film->get_price()<<" | ";
-	std::cout<<film->get_rate()<<" | ";
+	std::cout<<std::setprecision(2)<<film->get_rate()<<" | ";
 	std::cout<<film->get_year()<<" | ";
 	std::cout<<film->get_director()<<" | "<<std::endl;
 }
@@ -121,9 +122,12 @@ void FilmService::rate(User* logedin_user,std::map<std::string,std::string> info
 	else
 		throw NotFound();
 }
-std::vector<Film*> FilmService::recommend(User* logedin_user){
+std::vector<Film*> FilmService::recommend(int film_id){
 	Database* database = database->get_instance();
-	return database->get_sorted_films_by_rate(logedin_user);
+	std::vector<Film*> recommend_films;
+	for(int i=database->recommend(film_id).size()-1;i>=0;i--)
+		recommend_films.push_back(database->get_film(database->recommend(film_id)[i]));
+	return recommend_films;	
 }
 void FilmService::get_purchased(User* logedin_user,std::map<std::string,std::string> informations){
 	Database* database = database->get_instance();
@@ -146,8 +150,7 @@ void FilmService::get_purchased(User* logedin_user,std::map<std::string,std::str
 			database->get_film((logedin_user->get_sorted_purchased())[i])->check_min_year(min_year) &&
 			database->get_film((logedin_user->get_sorted_purchased())[i])->check_max_year(max_year) &&
 			database->get_film((logedin_user->get_sorted_purchased())[i])->check_price(price) &&
-			database->get_film((logedin_user->get_sorted_purchased())[i])->check_director(director) &&
-			!(database->get_film((logedin_user->get_sorted_purchased())[i])->deleted())){
+			database->get_film((logedin_user->get_sorted_purchased())[i])->check_director(director)){
 				print(database->get_film((logedin_user->get_sorted_purchased())[i]),i+1);
 			}
 	}

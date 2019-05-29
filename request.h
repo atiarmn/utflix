@@ -19,6 +19,7 @@
 #include "comment_service.h"
 #include "reply_service.h"
 #include "notif_service.h"
+#include "logout.h"
 
 class Request{
 public:
@@ -45,9 +46,12 @@ public:
 	void get_films_find();
 	void get_published();
 	void get_purchased();
+	void logout();
+	void get_money();
 private:
 	std::map<std::string, std::string> informations;
 	User* logedin_user;
+	User* admin;
 };
 
 #endif

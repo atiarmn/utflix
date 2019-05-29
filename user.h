@@ -11,6 +11,7 @@
 
 #define USER 0
 #define PUBLISHER 1
+#define ADMIN 2
 
 class Database;
 
@@ -36,7 +37,7 @@ public:
 	void print_unread_notifs();
 	void print_read_notifs(int limit);
 	void add_notif(std::string notif);
-
+	
 	bool film_bought(int film_id);
 	bool existed_follower(int pub_id);
 

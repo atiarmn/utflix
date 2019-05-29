@@ -5,6 +5,7 @@ void Buy::post(User* logedin_user,std::map<std::string,std::string> informations
 	Database* database = database->get_instance();
 	User* publisher;
 	std::string notif;
+	database->add_to_recommends(logedin_user,film_id);
 	if(database->existed_film(film_id)){
 		int price=(database->get_film(film_id))->get_price();
 		if(logedin_user->get_money() < price)

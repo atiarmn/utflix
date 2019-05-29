@@ -17,8 +17,8 @@ public:
 private:
 	void handle();
 	void post();
-	void put();
-	void delete_func();
+	// void put();
+	// void delete_func();
 	void get();
 	void check_email(std::string email);
 	void check_num(std::string number);

@@ -11,6 +11,6 @@
 
 class Signup{
 public:
-	User* post(std::map<std::string,std::string> informations);	
+	User* post(User* logedin_user,std::map<std::string,std::string> informations);	
 };
 #endif

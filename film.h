@@ -30,6 +30,7 @@ public:
 	void post_rate(User* logedin_user,std::map<std::string,std::string> informations);
 	void delete_comment(int comment_id);
 	void set_delete();
+	void set_type(std::string _type);
 
 	int get_id(){return id;}
 	int get_price(){return std::stoi(price,nullptr,0);}
