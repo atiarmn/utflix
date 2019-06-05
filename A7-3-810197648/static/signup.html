@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body  {
+        background-image: url("static/projection-05.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+      }
+      div {
+        background-color:black; 
+        padding: 1%; 
+        max-width: 300px; 
+        border-radius: 3px; 
+        margin-left: 500px;
+  
+      }
+      p{
+        color:darkred;
+      }
+      h1{
+        color: darkred;
+        text-align: center;
+      }
+      h2{
+        color: darkred;
+        text-align: center;
+      }
+      #cb_span{color:darkred;}
+      .button {
+        background-color: darkred;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        display: inline-block;
+      }
+      .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+      }
+      .button span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+      }
+      .button:hover span {
+        padding-right: 25px;
+      }
+      .button:hover span:after {
+        opacity: 1;
+        right: 0;}
+      input[type=button],[type=reset]{
+            background-color: darkred;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+          }
+    </style>
+  </head>
+  <body>
+    <h1>UTFLIX</h1>
+    <div>
+      <form action="/signup" method="post">
+        <h2 style="text-align:center;">SIGNUP</h2>
+        <p>Username:</p>
+        <input name="username" type="text" placeholder="Username" required><br>
+        <p>Password:</p>
+        <input name="password" type="password" placeholder="Password" required><br>
+        <p>Repeat your password:</p>
+        <input name="repeat_password" type="password" placeholder="Repeat your password" required><br>
+        <p>Age:</p>
+        <input name="age" type="number" placeholder="Age" min="1" required><br>
+        <p>Email:</p>
+        <input name="email" type="email" placeholder="Email" required><br>
+        <input name="publisher" type="checkbox" value="true"><span id="cb_span">Publisher</span><br>
+        <button type="submit" class="button"><span>Signup</span></button>
+        <a href="/login"><button type="submit" class="button"><span>I already have an account!</span></button></a>
+        <input type="reset">
+      </form>
+    </div>
+  </body>
+</html>
