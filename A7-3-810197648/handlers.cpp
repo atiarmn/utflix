@@ -97,12 +97,14 @@ Response *LoginHandler::callback(Request *req) {
   }
   Login* login = new Login();
   redirect=login->post(informations);
-  int id;
+  int id=-1;
   if(database->get_user(informations["username"])!=NULL)
     id=database->get_user(informations["username"])->get_id();
   res = Response::redirect(redirect);
-  database->login(id);
-  res->setSessionId(to_string(id));
+  if(id!=-1){
+    database->login(id);
+    res->setSessionId(to_string(id));
+  }
   return res;
 }
 Response *HomepageHandler::callback(Request *req){

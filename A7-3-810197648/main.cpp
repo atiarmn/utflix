@@ -12,7 +12,6 @@ int main(int argc, char **argv) {
     server.get("/static/projection-05.jpg",new ShowImage("static/projection-05.jpg"));
     server.get("/",new ShowPage("static/home.html"));
     server.get("/signup",new ShowPage("static/signup.html"));
-    server.post("/signup",new SignupHandler());
     server.get("/login", new ShowPage("static/login.html"));
     server.get("/error",new ErrorHandler());
     server.get("/publishedFilms",new PublishedHandler());
@@ -25,6 +24,7 @@ int main(int argc, char **argv) {
     server.get("/homepage",new HomepageHandler());
     server.get("/postfilm",new ShowPage("static/postfilm.html"));
 
+    server.post("/signup",new SignupHandler());
     server.post("/login", new LoginHandler());
     server.post("/delete",new DeleteFilmHandler());
     server.post("/search",new SearchFilmHandler());
